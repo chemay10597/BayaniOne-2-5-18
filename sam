@@ -1,0 +1,15 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+   $("form input[type=text],form input[type=checkbox]").prop("disabled",true);
+   $("input[name=editind]").on("click",function(){
+           $("input[name=first_name],input[name=middle_name],input[name=last_name],input[name=birthdate],input[name=residential_address],input[name=email_address]").removeAttr("disabled");
+   })
+   $("input[name=updateind]").on("click",function(){
+       $("input[name=first_name],input[name=middle_name],input[name=last_name],input[name=birthdate],input[name=residential_address],input[name=email_address]").prop("disabled",true);
+   })
+  })
+</script>
+
+
+background-image:url(images/help.jpg); background-repeat:no-repeat; background-size: 100% 100%;
