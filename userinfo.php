@@ -20,7 +20,6 @@
                   <span class="icon-bar"></span>
                 </button>
                 <a class = "navbar-brand" href="home.php"><span><image src = "../images/logo.png" height= "50px" width="50px"></span><span><image src = "../images/logotext.png" id="logotext" height= "50px" width="200px"></span></a>
-              <!-- <a class="navbar-brand" href="index.html">BayaniOne<span>.</span></a> -->
               </div>
 
               <div class="collapse navbar-collapse" id="myNavbar">
@@ -157,16 +156,18 @@
           //code to get the login user info based on account_type (individual user)
           if($account_type='individual')
           {
-            $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN individual_user ON users.user_id=individual_user.user_id WHERE users.username = '".$_SESSION['username']."'");
+            $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN individual_user ON users.user_id=individual_user.user_id INNER JOIN address ON users.address_id=address.address_id WHERE users.username = '".$_SESSION['username']."'");
             while($row = mysqli_fetch_assoc($result))
               {
                 echo "<div>";
                   echo "<table>";
                     echo "<tbody>";
-                      echo "<form action='home.php' method='post'>";
+                      echo "<form action='' method='post'>";
                         echo "<tr>";
                           echo "<td>";
                             echo "<input type='hidden' name='user_id' id='user_id' value =" . $row['user_id']. ">";
+                            echo "<input type='hidden' name='iu_id' id='iu_id' value =" . $row['iu_id']. ">";
+                            echo "<input type='hidden' name='address_id' id='address_id' value =" . $row['address_id']. ">";
                             echo "<img src='Uploads/",$row['user_photo'],"' width='175' height='200' />";
                           echo "</td>";
                         echo "</tr>";
@@ -186,11 +187,28 @@
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Residential Address:' . "</td>";
-                          echo "<td>" . "<input type='text' id='residential_address' name='residential_address' value=". $row['residential_address'] ." >" . "</td>";
+                          echo "<td>" . "<input type='text' id='street' name='street' value=". $row['street'] ." >";
+                          echo "<input type='text' id='barangay' name='barangay' value=". $row['barangay'] ." >";
+                          echo "<input type='text' id='city' name='city' value=". $row['city'] ." >";
+                          echo "<input type='text' id='zip_code' name='zip_code' value=". $row['zip_code'] ." >";
+                          echo "<input type='text' id='province' name='province' value=". $row['province'] ." >";
+                          echo "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Gender:' . "</td>";
+                          echo "<td>" . "<input type='text' id='gender' name='gender' value=". $row['gender'] ." >" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Email:' . "</td>";
                           echo "<td>" . "<input type='text' id='email_address' name='email_address' placeholder='user@domain.com' value=". $row['email_address'] ." >" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Mobile No:' . "</td>";
+                          echo "<td>" . "<input type='text' id='mobile_no' name='mobile_no' value=". $row['mobile_no'] ." >" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Telephone:' . "</td>";
+                          echo "<td>" . "<input type='text' id='telephone_no' name='telephone_no' value=". $row['telephone_no'] ." >" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Username:' . "</td>";
@@ -217,16 +235,26 @@
           <?php
             if (isset($_POST['updateind'])) {
             $user_id = $_POST['user_id'];
+            $org_id = $_POST['org_id'];
+            $address_id = $_POST['address_id'];
             $first_name = $_POST['first_name'];
             $middle_name = $_POST['middle_name'];
             $last_name = $_POST['last_name'];
             $birthdate = $_POST['birthdate'];
-            $residential_address = $_POST['residential_address'];
+            $gender = $_POST['gender'];
+            $street = $_POST['street'];
+            $barangay = $_POST['barangay'];
+            $city = $_POST['city'];
+            $zip_code = $_POST['zip_code'];
+            $province = $_POST['province'];
             $email_address = $_POST['email_address'];
+            $mobile_no = $_POST['mobile_no'];
+            $telephone_no = $_POST['telephone_no'];
             $username = $_POST['username'];
             $password = $_POST['password'];
-            mysqli_query($connect, "UPDATE users SET residential_address='$residential_address', email_address='$email_address', username='$username', password='$password', email='$email' WHERE user_id=$user_id");
-            mysqli_query($connect, "UPDATE individual_user SET first_name='$first_name', middle_name='$middle_name', last_name='$last_name', birthdate='$birthdate' WHERE user_id=$user_id");
+            mysqli_query($connect, "UPDATE users SET email_address='$email_address', mobile_no='$mobile_no', telephone_no='$telephone_no', username='$username', password='$password' WHERE user_id=$user_id");
+            mysqli_query($connect, "UPDATE individual_user SET first_name='$first_name', middle_name='$middle_name', last_name='$last_name', birthdate='$birthdate', gender='$gender' WHERE iu_id=$iu_id");
+            mysqli_query($connect, "UPDATE address SET street='$street', barangay='$barangay', city='$city', zip_code='$zip_code', province='$province' WHERE address_id=$address_id");
             if(mysqli_affected_rows($connect) > 0){
               echo "Successfully Update!";
             }else {
@@ -235,6 +263,7 @@
             echo "<meta http-equiv='refresh' content='0'>";
             }
           ?>
+
           <?php
             //code to get login user info for organization_user
             $connect=mysqli_connect("localhost","root","","bayanion_db");
@@ -246,7 +275,7 @@
             //code to get the login user info based on account_type (organization user)
             if($account_type='organization')
             {
-              $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN organization_user ON users.user_id=organization_user.user_id WHERE users.username = '".$_SESSION['username']."'");
+              $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN organization_user ON users.user_id=organization_user.user_id INNER JOIN address ON users.address_id=address.address_id WHERE users.username = '".$_SESSION['username']."'");
               while($row = mysqli_fetch_assoc($result))
               {
                 echo "<div>";
@@ -256,6 +285,8 @@
                         echo "<tr>";
                           echo "<td>";
                             echo "<input type='hidden' name='user_id' id='user_id' value =" . $row['user_id']. ">";
+                            echo "<input type='hidden' name='org_id' id='iu_id' value =" . $row['org_id']. ">";
+                            echo "<input type='hidden' name='address_id' id='address_id' value =" . $row['address_id']. ">";
                             echo "<img src='Uploads/",$row['user_photo'],"' width='175' height='200' />";
                           echo "</td>";
                         echo "</tr>";
@@ -268,12 +299,25 @@
                           echo "<td>" . "<input type='text' id='rep_name' name='rep_name' value=".$row['rep_name'] .">" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
-                          echo "<td>" . 'Residential Address:' . "</td>";
-                          echo "<td>" . "<input type='text' id='residential_address' name='residential_address' value=".$row['residential_address'] .">" . "</td>";
+                        echo "<td>" . 'Residential Address:' . "</td>";
+                        echo "<td>" . "<input type='text' id='street' name='street' value=". $row['street'] ." >";
+                        echo "<input type='text' id='barangay' name='barangay' value=". $row['barangay'] ." >";
+                        echo "<input type='text' id='city' name='city' value=". $row['city'] ." >";
+                        echo "<input type='text' id='zip_code' name='zip_code' value=". $row['zip_code'] ." >";
+                        echo "<input type='text' id='province' name='province' value=". $row['province'] ." >";
+                        echo "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Email:' . "</td>";
                           echo "<td>" . "<input type='text' id='email_address' name='email_address' value=". $row['email_address'] .">" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Mobile No:' . "</td>";
+                          echo "<td>" . "<input type='text' id='mobile_no' name='mobile_no' value=". $row['mobile_no'] ." >" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Telephone:' . "</td>";
+                          echo "<td>" . "<input type='text' id='telephone_no' name='telephone_no' value=". $row['telephone_no'] ." >" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Username:' . "</td>";
@@ -299,14 +343,23 @@
           <?php
             if (isset($_POST['updateorg'])) {
               $user_id = $_POST['user_id'];
+              $org_id = $_POST['org_id'];
+              $address_id = $_POST['address_id'];
               $org_name = $_POST['org_name'];
               $rep_name = $_POST['rep_name'];
-              $residential_address = $_POST['residential_address'];
+              $street = $_POST['street'];
+              $barangay = $_POST['barangay'];
+              $city = $_POST['city'];
+              $zip_code = $_POST['zip_code'];
+              $province = $_POST['province'];
               $email_address = $_POST['email_address'];
+              $mobile_no = $_POST['mobile_no'];
+              $telephone_no = $_POST['telephone_no'];
               $username = $_POST['username'];
               $password = $_POST['password'];
               mysqli_query($connect, "UPDATE users SET residential_address='$residential_address', email_address='$email_address', username='$username', password='$password' WHERE user_id=$user_id");
-              mysqli_query($connect, "UPDATE organization_user SET org_name='$org_name', rep_name='$rep_name' WHERE user_id=$user_id");
+              mysqli_query($connect, "UPDATE organization_user SET org_name='$org_name', rep_name='$rep_name' WHERE org_id=$org_id");
+              mysqli_query($connect, "UPDATE address SET street='$street', barangay='$barangay', city='$city', zip_code='$zip_code', province='$province' WHERE address_id=$address_id");
               if(mysqli_affected_rows($connect) > 0){
                 echo "Successfully Update!";
               }else {

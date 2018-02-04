@@ -37,7 +37,6 @@
     </script>
   </head>
   <body>
-  <body>
       <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
           <div class="navbar-header">
@@ -115,8 +114,6 @@
         </div>
       </nav>
 
-
-  <body>
   <section id="goodwork" class="section-padding" style="background-color:#b3b3b3;">
     <div class="main">
       <div class="header" >
@@ -141,6 +138,24 @@
                   $next = $row['MAX(user_id)'] + 1;
                 }
                   echo "<input value='". $next ."' type='hidden' name='user_id' id='user_id'>";
+                  echo "</input>";
+              }
+              mysqli_close($connect);
+            ?>
+            <?php
+              //code to get user_id
+              $connect=mysqli_connect("localhost","root","","bayanion_db");
+              // Check connection
+              if (mysqli_connect_errno())
+              {
+                echo "Failed to connect to MySQL: " . mysqli_connect_error();
+              }
+              $result = mysqli_query($connect,"SELECT MAX(address_id) FROM address GROUP BY address_id");
+              if(mysqli_num_rows($result) > 0){
+                while($row = mysqli_fetch_array($result)){
+                  $next = $row['MAX(address_id)'] + 1;
+                }
+                  echo "<input value='". $next ."' type='hidden' name='address_id' id='address_id'>";
                   echo "</input>";
               }
               mysqli_close($connect);
@@ -177,8 +192,12 @@
                     <div class="clear"> </div>
                   </li>
                   <li>
-                    <input type="radio" name="gender" id="gender" value="male"> Male
-                    <input type="radio" name="gender" id="gender" value="female"> Female
+                    <label>Gender:</label><i>&nbsp &nbsp</i>
+                    <select class="input" runat="server" id="gender" name="gender" value="" style="border:0;" Height="22px" Width="187px"required>
+                      <option value="">choose gender ..</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
                     <a href="#" class="icon into"> </a>
                     <div class="clear"> </div>
                   </li>
@@ -199,7 +218,37 @@
               </ul>
             </div>
             <li>
-              <input id = "residential_address" name="residential_address" type="text" placeholder="complete address ..." required/>
+              <input type="text" id="street" name="street" placeholder="Street ..." required/>
+              <a href="#" class="icon into"> </a>
+              <div class="clear"> </div>
+            </li>
+            <li>
+              <input type="text" id="barangay" name="barangay" placeholder="Barangay ..." required/>
+              <a href="#" class="icon into"> </a>
+              <div class="clear"> </div>
+            </li>
+            <li>
+              <input type="text" id="city" name="city" placeholder="City ..." required/>
+              <a href="#" class="icon into"> </a>
+              <div class="clear"> </div>
+            </li>
+            <li>
+              <input type="text" id="zip_code" name="zip_code" placeholder="Zip Code ..." required/>
+              <a href="#" class="icon into"> </a>
+              <div class="clear"> </div>
+            </li>
+            <li>
+              <input type="text" id="province" name="province" placeholder="Province ..." required/>
+              <a href="#" class="icon into"> </a>
+              <div class="clear"> </div>
+            </li>
+            <li>
+              <input type="text" id="mobile_no" name="mobile_no" placeholder="Mobile No ..." required/>
+              <a href="#" class="icon into"> </a>
+              <div class="clear"> </div>
+            </li>
+            <li>
+              <input type="text" id="telephone_no" name="telephone_no" placeholder="Telephone No ..." required/>
               <a href="#" class="icon into"> </a>
               <div class="clear"> </div>
             </li>
@@ -243,6 +292,21 @@
                 <a href="#" class="icon into"> </a>
                 <div class="clear"> </div>
               </li>
+              <li>
+                <input id="confirm_password" name="confirm_password" type="password" placeholder="confirm password ..." required/>
+                </br>
+                <span id='message'></span>
+                <script>
+                  $('#password, #confirm_password').on('keyup', function () {
+                    if ($('#password').val() == $('#confirm_password').val()) {
+                      $('#message').html('Password Matched').css('color', '#669999');
+                    } else
+                      $('#message').html('Not Matched').css('color', 'red');
+                  });
+                </script>
+                <a href="#" class="icon into"> </a>
+                <div class="clear"> </div>
+              </li>
                 <button type="submit" class="signupbtn" height="59px"width="341px" id="registerUser" name="registerUser" >Sign Up</button>
             </div>
             <div class="clear"> </div>
@@ -275,18 +339,20 @@
           //code to insert records in users table, individual_user table, and organization_user table
           if(isset($_POST['registerUser']))
           {
-            //variables
-            /*$result = mysqli_query($connect,"SELECT MAX(user_id) FROM users GROUP BY user_id");
-            if(mysqli_num_rows($result) > 0){
-              while($row = mysqli_fetch_array($result)){
-                $next = $row['MAX(user_id)'] + 1;
-              }
-                echo "<input value='". $next ."' type='hidden' name='user_id' id='user_id'>";
-                echo "</input>";
-            }
-            mysqli_close($connect);*/
             $user_id = $_POST['user_id'];
+            $address_id = $_POST['address_id'];
             $account_type = $_POST['account_type'];
+            $email_address = $_POST['email_address'];
+            $user_photo = $_POST['user_photo'];
+            $mobile_no = $_POST['mobile_no'];
+            $telephone_no = $_POST['telephone_no'];
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $street = $_POST['street'];
+            $barangay = $_POST['barangay'];
+            $city = $_POST['city'];
+            $zip_code = $_POST['zip_code'];
+            $province = $_POST['province'];
             $first_name = $_POST['first_name'];
             $last_name = $_POST['last_name'];
             $middle_name = $_POST['middle_name'];
@@ -294,11 +360,6 @@
             $gender = $_POST['gender'];
             $org_name = $_POST['org_name'];
             $rep_name = $_POST['rep_name'];
-            $user_photo = $_POST['user_photo'];
-            $residential_address = $_POST['residential_address'];
-            $email_address = $_POST['email_address'];
-            $username = $_POST['username'];
-            $password = $_POST['password'];
 
             if(isset($_FILES['user_photo'])) {
               $user_photo=addslashes(file_get_contents($_FILES['user_photo']['tmp_name'])); //will store the image to fp
@@ -306,21 +367,26 @@
 
             //query to insert data
 
-            mysqli_query($connect, "INSERT INTO users (account_type,user_photo,residential_address,email_address,username,password)
-                        VALUES('$account_type','$user_photo','$residential_address','$email_address','$username','$password')");
-                              if(mysqli_affected_rows($connect) > 0){
-                                echo "      ";
-                              }else {
-                                echo mysqli_error($connect);
-                                echo "Not Added!";
-                              }
-
             //code to insert records individual_user table
             if($account_type=='individual'){
+              mysqli_query($connect, "INSERT INTO users (address_id,account_type,user_photo,email_address,mobile_no,telephone_no,username,password)
+                          VALUES('$address_id','$account_type','$user_photo','$email_address','$mobile_no','$telephone_no','$username','$password')");
+                                if(mysqli_affected_rows($connect) > 0){
+                                }else {
+                                  echo mysqli_error($connect);
+                                  echo "Not Added!";
+                                }
+
+                                mysqli_query($connect, "INSERT INTO address (street,barangay,city,zip_code,province)
+                                            VALUES('$street','$barangay','$city','$zip_code','$province')");
+                                                if(mysqli_affected_rows($connect) > 0){
+                                                }else {
+                                                  echo mysqli_error($connect);
+                                                  echo "Not Added!";
+                                                  }
               mysqli_query($connect, "INSERT INTO individual_user (user_id,first_name,last_name,middle_name,birthdate,gender)
                           VALUES('$user_id','$first_name','$last_name','$middle_name','$birthdate','$gender')");
                               if(mysqli_affected_rows($connect) > 0){
-                                echo "      ";
                               }else {
                                 echo mysqli_error($connect);
                                 echo "Not Added!";
@@ -328,10 +394,24 @@
             }
             //code to insert records organization_user table
             else if($account_type=='organization'){
+              mysqli_query($connect, "INSERT INTO users (address_id,account_type,user_photo,email_address,mobile_no,telephone_no,username,password,confirm_password)
+                          VALUES('$address_id','$account_type','$user_photo','$email_address','$mobile_no','$telephone_no','$username','$password','$confirm_password')");
+                                if(mysqli_affected_rows($connect) > 0){
+                                }else {
+                                  echo mysqli_error($connect);
+                                  echo "Not Added!";
+                                }
+
+                                mysqli_query($connect, "INSERT INTO address (street,barangay,city,zip_code,province)
+                                            VALUES('$street','$barangay','$city','$zip_code','$province')");
+                                                if(mysqli_affected_rows($connect) > 0){
+                                                }else {
+                                                  echo mysqli_error($connect);
+                                                  echo "Not Added!";
+                                                  }
               mysqli_query($connect, "INSERT INTO organization_user (user_id,org_name,rep_name)
                           VALUES('$user_id','$org_name','$rep_name')");
                                 if(mysqli_affected_rows($connect) > 0){
-                                    echo "      ";
                                 }else {
                                     echo mysqli_error($connect);
                                     echo "Not Added!";

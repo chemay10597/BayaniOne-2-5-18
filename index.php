@@ -30,7 +30,6 @@
               <span class="icon-bar"></span>
             </button>
             <a class = "navbar-brand" href="index.php"><span><image src = "../images/logo.png" height= "50px" width="50px"></span><span><image src = "../images/logotext.png" id="logotext" height= "50px" width="200px"></span></a>
-          <!-- <a class="navbar-brand" href="index.html">BayaniOne<span>.</span></a> -->
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -99,139 +98,141 @@
     </nav>>
 
     <!--Banner-->
-  <div class="banner">
-    <div class="bg-color">
-      <div class="container">
-        <div class="row">
-          <div class="banner-text text-center">
-            <div class="text-border">
-                <h2 class="text-dec">Welcome to BayaniOne</h2>
+  <section>
+    <div class="banner">
+      <div class="bg-color">
+        <div class="container">
+          <div class="row">
+            <div class="banner-text text-center">
+              <div class="text-border">
+                  <h2 class="text-dec">Welcome to BayaniOne</h2>
+              </div>
+              <div class="intro-para text-center quote">
+                  <p class="big-text">Help starts with everyone of us</p>
+                   <p class="small-text">A person has two hands, one is for helping himself.<br>The other is for helping others. </p>
+                  <a href="#footer" class="btn get-quote">About Us</a>
+              </div>
+              <a href="#work-shop" class="mouse-hover"><div class="mouse"></div></a>
             </div>
-            <div class="intro-para text-center quote">
-                <p class="big-text">Help starts with everyone of us</p>
-                 <p class="small-text">A person has two hands, one is for helping himself.<br>The other is for helping others. </p>
-                <a href="#footer" class="btn get-quote">About Us</a>
-            </div>
-            <a href="#work-shop" class="mouse-hover"><div class="mouse"></div></a>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</br></br>
-  <div id="work-shop" style="background-color:#b3b3b3;">
-    <?php
-      //code to diplays post, comment, and insert comment for all that login user can see (donation_campaign)
-      $connect=mysqli_connect("localhost","root","","bayanion_db");
-      // Check connection
-      if (mysqli_connect_errno())
-      {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-      }
+  </br></br>
+    <div id="work-shop" style="background-color:#b3b3b3;">
+      <?php
+        //code to diplays post, comment, and insert comment for all that login user can see (donation_campaign)
+        $connect=mysqli_connect("localhost","root","","bayanion_db");
+        // Check connection
+        if (mysqli_connect_errno())
+        {
+          echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
 
-      //code to display donation posts
-      $result = mysqli_query($connect,"SELECT * FROM donation_campaign INNER JOIN users ON donation_campaign.user_id=users.user_id WHERE donation_campaign.post_status='public'");
-      echo "<table>";
-      echo "<center>";
-        echo "<tbody>";
-          echo "<form action='home.php' method='post'>";
-            echo "<tr>";
-            $i = 0;
-      while($row = mysqli_fetch_assoc($result) AND $i<4)
-      {
-        $i++;
-        $campaign_id=$row['campaign_id'];
-        $user_id=$row['user_id'];
-                echo "<td style='text-align: left; padding: 10px;width:350px; height: 400px; background-color: #ffffff;'>";
-                    echo "<img class='img-circle' src='Uploads/",$row['user_photo'],"' width='50px' height='50px' />";
-                  echo "<label name='username' id='username' value =" . $row['username'] . ">". $row['username'] ."</label>";
-                    echo "</br>";
-                if($row['post_status']==='timeline')
-                {
-                    echo "<img src='images/user.png' width='20px' height='20px' />";
-                    echo "<label >". '@' ."</label>";
-                  echo "<label type='text' name='tag_user' id='tag_user' value =" . $row['tag_user'] . ">". $row['tag_user'] ."</label>";
-                  echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-                  echo "<img src='images/public.png' width='20px' height='20px' />";
-                  echo "<label type='text' name='post_status' id='post_status' value =" . $row['post_status'] . ">" . $row['post_status'] ."</label>";
+        //code to display donation posts
+        $result = mysqli_query($connect,"SELECT * FROM donation_campaign INNER JOIN users ON donation_campaign.user_id=users.user_id WHERE donation_campaign.post_status='public'");
+        echo "<table>";
+        echo "<center>";
+          echo "<tbody>";
+            echo "<form action='home.php' method='post'>";
+              echo "<tr>";
+              $i = 0;
+        while($row = mysqli_fetch_assoc($result) AND $i<4)
+        {
+          $i++;
+          $campaign_id=$row['campaign_id'];
+          $user_id=$row['user_id'];
+                  echo "<td style='text-align: left; padding: 10px;width:350px; height: 400px; background-color: #ffffff;'>";
+                      echo "<img class='img-circle' src='Uploads/",$row['user_photo'],"' width='50px' height='50px' />";
+                    echo "<label name='username' id='username' value =" . $row['username'] . ">". $row['username'] ."</label>";
+                      echo "</br>";
+                  if($row['post_status']==='timeline')
+                  {
+                      echo "<img src='images/user.png' width='20px' height='20px' />";
+                      echo "<label >". '@' ."</label>";
+                    echo "<label type='text' name='tag_user' id='tag_user' value =" . $row['tag_user'] . ">". $row['tag_user'] ."</label>";
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                    echo "<img src='images/time.png' width='20px' height='20px' />";
-                  echo "<label type='text' name='create_date' id='post_status' value =" . $row['create_date'] . ">" . $row['create_date'] ."</label>";
-                    echo "</br>";
-                    echo "</br>";
-                  echo "<p>".$row['campaign_description']."</p>";
-                    echo "</br>";
-                  echo "<img src='Uploads/",$row['campaign_photo'],"' width='300px' height='250px' />";
-                    echo "</br>";
-                echo "</td>";
-      }
-            echo "</tr>";
-          echo "</form>";
-        echo "</tbody>";
-        echo "</center>";
-      echo "</table>";
-      echo "</br>";
-      mysqli_close($connect);
-    ?>
+                  }
+                    echo "<img src='images/public.png' width='20px' height='20px' />";
+                    echo "<label type='text' name='post_status' id='post_status' value =" . $row['post_status'] . ">" . $row['post_status'] ."</label>";
+                      echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                      echo "<img src='images/time.png' width='20px' height='20px' />";
+                    echo "<label type='text' name='create_date' id='post_status' value =" . $row['create_date'] . ">" . $row['create_date'] ."</label>";
+                      echo "</br>";
+                      echo "</br>";
+                    echo "<p>".$row['campaign_description']."</p>";
+                      echo "</br>";
+                    echo "<img src='Uploads/",$row['campaign_photo'],"' width='300px' height='250px' />";
+                      echo "</br>";
+                  echo "</td>";
+        }
+              echo "</tr>";
+            echo "</form>";
+          echo "</tbody>";
+          echo "</center>";
+        echo "</table>";
+        echo "</br>";
+        mysqli_close($connect);
+      ?>
 
-    <?php
-      //code to diplays post, comment, and insert comment for all that login user can see (donation_campaign)
-      $connecttest=mysqli_connect("localhost","root","","bayanion_db");
-      // Check connection
-      if (mysqli_connect_errno())
-      {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-      }
+      <?php
+        //code to diplays post, comment, and insert comment for all that login user can see (donation_campaign)
+        $connecttest=mysqli_connect("localhost","root","","bayanion_db");
+        // Check connection
+        if (mysqli_connect_errno())
+        {
+          echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
 
-      //code to display donation posts
-      $result_testimonies = mysqli_query($connecttest,"SELECT * FROM testimonies INNER JOIN users ON testimonies.user_id=users.user_id WHERE testimonies.post_status='public'");
-      echo "<table>";
-      echo "<center>";
-        echo "<tbody>";
-          echo "<form action='home.php' method='post'>";
-            echo "<tr>";
-            $i = 0;
-      while($rowtestimony = mysqli_fetch_assoc($result_testimonies) AND $i<4)
-      {
-        $i++;
-        $campaign_id=$row['campaign_id'];
-        $user_id=$row['user_id'];
-                echo "<td style='text-align: left; padding: 10px;width:350px; height: 200px; background-color: #ffffff;'>";
-                    echo "<img class='img-circle' src='Uploads/",$rowtestimony['user_photo'],"' width='50px' height='50px' />";
-                    echo "</br>";
-                    echo "<center>";
-                  echo "<label name='username' id='username' value =" . $rowtestimony['username'] . ">". $rowtestimony['username'] ."</label>";
-                    echo "</center>";
-                    echo "</br>";
+        //code to display donation posts
+        $result_testimonies = mysqli_query($connecttest,"SELECT * FROM testimonies INNER JOIN users ON testimonies.user_id=users.user_id WHERE testimonies.post_status='public'");
+        echo "<table>";
+        echo "<center>";
+          echo "<tbody>";
+            echo "<form action='home.php' method='post'>";
+              echo "<tr>";
+              $i = 0;
+        while($rowtestimony = mysqli_fetch_assoc($result_testimonies) AND $i<4)
+        {
+          $i++;
+          $campaign_id=$row['campaign_id'];
+          $user_id=$row['user_id'];
+                  echo "<td style='text-align: left; padding: 10px;width:350px; height: 200px; background-color: #ffffff;'>";
+                      echo "<img class='img-circle' src='Uploads/",$rowtestimony['user_photo'],"' width='50px' height='50px' />";
+                      echo "</br>";
+                      echo "<center>";
+                    echo "<label name='username' id='username' value =" . $rowtestimony['username'] . ">". $rowtestimony['username'] ."</label>";
+                      echo "</center>";
+                      echo "</br>";
 
-                if($rowtestimony['post_status']==='timeline')
-                {
-                    echo "<img src='images/user.png' width='20px' height='20px' />";
-                    echo "<label >". '@' ."</label>";
-                  echo "<label type='text' name='tag_user' id='tag_user' value =" . $rowtestimony['tag_user'] . ">". $rowtestimony['tag_user'] ."</label>";
-                  echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-                  echo "<img src='images/public.png' width='20px' height='20px' />";
-                  echo "<label type='text' name='post_status' id='post_status' value =" . $rowtestimony['post_status'] . ">" . $rowtestimony['post_status'] ."</label>";
+                  if($rowtestimony['post_status']==='timeline')
+                  {
+                      echo "<img src='images/user.png' width='20px' height='20px' />";
+                      echo "<label >". '@' ."</label>";
+                    echo "<label type='text' name='tag_user' id='tag_user' value =" . $rowtestimony['tag_user'] . ">". $rowtestimony['tag_user'] ."</label>";
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                    echo "<img src='images/time.png' width='20px' height='20px' />";
-                  echo "<label type='text' name='create_date' id='post_status' value =" . $rowtestimony['create_date'] . ">" . $rowtestimony['create_date'] ."</label>";
-                    echo "</br>";
-                    echo "</br>";
-                  echo "<p>".$rowtestimony['testimony']."</p>";
-                    echo "</br>";
-                echo "</td>";
-      }
-      echo "</tr>";
-    echo "</form>";
-  echo "</tbody>";
-  echo "</center>";
-echo "</table>";
-echo "</br>";
-      mysqli_close($connecttest);
-    ?>
-  </div>
+                  }
+                    echo "<img src='images/public.png' width='20px' height='20px' />";
+                    echo "<label type='text' name='post_status' id='post_status' value =" . $rowtestimony['post_status'] . ">" . $rowtestimony['post_status'] ."</label>";
+                      echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                      echo "<img src='images/time.png' width='20px' height='20px' />";
+                    echo "<label type='text' name='create_date' id='post_status' value =" . $rowtestimony['create_date'] . ">" . $rowtestimony['create_date'] ."</label>";
+                      echo "</br>";
+                      echo "</br>";
+                    echo "<p>".$rowtestimony['testimony']."</p>";
+                      echo "</br>";
+                  echo "</td>";
+        }
+        echo "</tr>";
+      echo "</form>";
+    echo "</tbody>";
+    echo "</center>";
+  echo "</table>";
+  echo "</br>";
+        mysqli_close($connecttest);
+      ?>
+    </div>
+  </section>
 
   <footer id="myFooter">
     <center>

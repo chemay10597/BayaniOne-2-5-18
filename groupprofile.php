@@ -146,7 +146,7 @@
                 echo "<div>";
                   echo "<table>";
                     echo "<tbody>";
-                      echo "<form action='home.php' method='post'>";
+                      echo "<form action='' method='post'>";
                         echo "<tr>";
                           echo "<td>";
                             echo "<input type='hidden' name='group_id' id='group_id' value =" . $row['group_id']. ">";
@@ -189,17 +189,12 @@
           <?php include 'databaseconn.php' ?>
           <?php
             if (isset($_POST['updateind'])) {
-            $user_id = $_POST['user_id'];
-            $first_name = $_POST['first_name'];
-            $middle_name = $_POST['middle_name'];
-            $last_name = $_POST['last_name'];
-            $birthdate = $_POST['birthdate'];
-            $residential_address = $_POST['residential_address'];
-            $email_address = $_POST['email_address'];
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            mysqli_query($connect, "UPDATE users SET residential_address='$residential_address', email_address='$email_address', username='$username', password='$password', email='$email' WHERE user_id=$user_id");
-            mysqli_query($connect, "UPDATE individual_user SET first_name='$first_name', middle_name='$middle_name', last_name='$last_name', birthdate='$birthdate' WHERE user_id=$user_id");
+            $group_id = $_POST['group_id'];
+            $group_name = $_POST['group_name'];
+            $group_description = $_POST['group_description'];
+            $admin = $_POST['admin'];
+            $members = $_POST['members'];
+            mysqli_query($connect, "UPDATE groups SET group_name='$group_name', group_description='$group_description', admin='$admin', members='$members' WHERE group_id=$group_id");
             if(mysqli_affected_rows($connect) > 0){
               echo "Successfully Update!";
             }else {
@@ -208,88 +203,6 @@
             echo "<meta http-equiv='refresh' content='0'>";
             }
           ?>
-          <?php
-          /*  //code to get login user info for organization_user
-            $connect=mysqli_connect("localhost","root","","bayanion_db");
-            // Check connection
-            if (mysqli_connect_errno())
-            {
-              echo "Failed to connect to MySQL: " . mysqli_connect_error();
-            }
-            //code to get the login user info based on account_type (organization user)
-            if($account_type='organization')
-            {
-              $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN organization_user ON users.user_id=organization_user.user_id WHERE users.username = '".$_SESSION['username']."'");
-              while($row = mysqli_fetch_assoc($result))
-              {
-                echo "<div>";
-                  echo "<table>";
-                    echo "<tbody>";
-                      echo "<form action='home.php' method='post'>";
-                        echo "<tr>";
-                          echo "<td>";
-                            echo "<input type='hidden' name='user_id' id='user_id' value =" . $row['user_id']. ">";
-                            echo "<img src='Uploads/",$row['user_photo'],"' width='175' height='200' />";
-                          echo "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          echo "<td>" . 'User Full Name:' . "</td>";
-                          echo "<td>" . "<input type='text' id='org_name' name='org_name' value=". $row['org_name'] .">" . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          echo "<td>" . 'Representative Name:' . "</td>";
-                          echo "<td>" . "<input type='text' id='rep_name' name='rep_name' value=".$row['rep_name'] .">" . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          echo "<td>" . 'Residential Address:' . "</td>";
-                          echo "<td>" . "<input type='text' id='residential_address' name='residential_address' value=".$row['residential_address'] .">" . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          echo "<td>" . 'Email:' . "</td>";
-                          echo "<td>" . "<input type='text' id='email_address' name='email_address' value=". $row['email_address'] .">" . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          echo "<td>" . 'Username:' . "</td>";
-                          echo "<td>" . "<input type='text' id='username' name='username' value=". $row['username'] ." >" . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          echo "<td>" . 'Password:' . "</td>";
-                          echo "<td>" . "<input type='text' id='password' name='pasword' value=". $row['password'] ." >" . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                          //echo "<td>" . "<input type='submit' id='editorg' name='editorg' value='edit'>" . "</td>";
-                          echo "<td>" . "<input type='submit' id='updateorg' name='updateorg' value='update'>" . "</td>";
-                        echo "</tr>";
-                      echo "</form>";
-                    echo "</tbody>";
-                  echo "</table>";
-                echo "</div>";
-              }
-            }
-            mysqli_close($connect);
-          ?>
-          <?php include 'databaseconn.php' ?>
-          <?php
-            if (isset($_POST['updateorg'])) {
-              $user_id = $_POST['user_id'];
-              $org_name = $_POST['org_name'];
-              $rep_name = $_POST['rep_name'];
-              $residential_address = $_POST['residential_address'];
-              $email_address = $_POST['email_address'];
-              $username = $_POST['username'];
-              $password = $_POST['password'];
-              mysqli_query($connect, "UPDATE users SET residential_address='$residential_address', email_address='$email_address', username='$username', password='$password' WHERE user_id=$user_id");
-              mysqli_query($connect, "UPDATE organization_user SET org_name='$org_name', rep_name='$rep_name' WHERE user_id=$user_id");
-              if(mysqli_affected_rows($connect) > 0){
-                echo "Successfully Update!";
-              }else {
-                echo mysqli_error($connect);
-              }
-            echo "<meta http-equiv='refresh' content='0'>";
-          }*/
-          ?>
-
-
 
           <div class="createactivity">
             </br>
@@ -329,7 +242,30 @@
                   }
                   mysqli_close($connect);
                 ?>
+                <?php
+                  //code to get user_id
+                  $connect=mysqli_connect("localhost","root","","bayanion_db");
+                  // Check connection
+                  if (mysqli_connect_errno())
+                  {
+                    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                  }
+                  $result = mysqli_query($connect,"SELECT MAX(address_id) FROM address GROUP BY address_id");
+                  if(mysqli_num_rows($result) > 0){
+                    while($row = mysqli_fetch_array($result)){
+                      $next = $row['MAX(address_id)'] + 1;
+                    }
+                      echo "<input value='". $next ."' type='hidden' name='address_id' id='address_id'>";
+                      echo "</input>";
+                  }
+                  mysqli_close($connect);
+                ?>
               </br>
+              <select class="input" id="post_status" name="post_status" value="" Height="22px" Width="187px" requireds>
+                  <option value="">where to post?</option>
+                  <option value="public">Public</option>
+                  <option value="timeline">Timeline</option>
+              </select>
               <input type="hidden" id="create_date" name="create_date"/>
               <input type="text" id="act_title" name="act_title" placeholder="Activity Title" style="width:500px;"/>
               </br></br>
@@ -339,7 +275,13 @@
               <input type="datetime-local" id="act_end" name="act_end"/>
               </br>
               </br>
-              <input type="text" id="location" name="location" placeholder="Activity Location" style="width:500px;"/>
+              <label>Location</label>
+              </br>
+              <input type="text" id="street" name="street" placeholder="Street"/>
+              <input type="text" id="barangay" name="barangay" placeholder="Barangay"/>
+              <input type="text" id="city" name="city" placeholder="City"/>
+              <input type="text" id="zip_code" name="zip_code" placeholder="Zip Code"/>
+              <input type="text" id="province" name="province" placeholder="Province"/>
               </br></br>
               <input class="btnlogin" type="submit" id="post_activity" name="post_activity" value="Post"/>
             </fieldset>
@@ -353,20 +295,33 @@
                 //variables
                 $group_id = $_POST['group_id'];
                 $user_id = $_POST['user_id'];
+                $address_id = $_POST['address_id'];
                 $act_title = $_POST['act_title'];
                 $act_start = $_POST['act_start'];
                 $act_end = $_POST['act_end'];
-                $location = $_POST['location'];
-                $create_date= $_POST['create_date'];
+                $create_date = $_POST['create_date'];
+                $post_status = $_POST['post_status'];
+                $street = $_POST['street'];
+                $barangay = $_POST['barangay'];
+                $city = $_POST['city'];
+                $zip_code = $_POST['zip_code'];
+                $province = $_POST['province'];
 
                 //query to insert data
-                mysqli_query($connect, "INSERT INTO activities (group_id,user_id,act_title,act_start,act_end,location,create_date)
-                            VALUES('$group_id','$user_id','$act_title','$act_start','$act_end','$location',NOW())");
+                mysqli_query($connect, "INSERT INTO activities (group_id,user_id,address_id,act_title,act_start,act_end,create_date,post_status)
+                            VALUES('$group_id','$user_id','$address_id','$act_title','$act_start','$act_end',NOW(),'$post_status')");
                             if(mysqli_affected_rows($connect) > 0){
                           }else {
                             echo mysqli_error($connect);
                             echo "Not Added!";
                           }
+                          mysqli_query($connect, "INSERT INTO address (address_id,street,barangay,city,zip_code,province)
+                                      VALUES('$address_id','$street','$barangay','$city','$zip_code','$province')");
+                                      if(mysqli_affected_rows($connect) > 0){
+                                    }else {
+                                      echo mysqli_error($connect);
+                                      echo "Not Added!";
+                                    }
               }
             ?>
           </div>

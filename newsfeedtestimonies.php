@@ -12,7 +12,7 @@
 
   while($rowtestimony = mysqli_fetch_assoc($result_testimonies))
   {
-    echo "<table style='width: 600px; height: 300px; background-color: #ffffff;'>";
+    echo "<table style='width: 600px; height: auto; background-color: #ffffff;'>";
     echo "<center>";
       echo "<tbody>";
         echo "<form action='home.php' method='post'>";
@@ -54,39 +54,12 @@
                     echo "<img src='/images/star.png' width='30px' height='30px' alt='submit'>";
                   echo "</button>";
                 echo "</form>";
-                echo "<form action='' method='post' style='float:right;padding-right:25em';>";
+                echo "<form action='testimonypost.php' method='get' style='float:right;padding-right:25em';>";
                 echo "<input type=hidden name='testimony_id' id='testimony_id' value =" . $rowtestimony['testimony_id'] . ">";
-                echo "<button name='commentbtn' id='commentbtn' style='border:0;background:transparent'>";
+                echo "<button name='commentbtntest' id='commentbtntest' style='border:0;background:transparent'>";
                   echo "<img src='/images/comment.png' width='30px' height='30px' alt='submit'>";
                 echo "</button>";
                 echo "</form>";
-              echo "<div>";
-              //code to create comment
-                  echo "<center>";
-                    echo "<form id='create_comment' name='create_comment' action='' method='post' style='display:inline-block;'>";
-                      echo "</br>";
-                      echo "<fieldset>";
-                          echo "<input type=hidden name='testimony_id' id='testimony_id' value =" . $rowtestimony['testimony_id'] . ">";
-                          echo "<input type='hidden' name='username' id='username' value ='". $_SESSION["username"] ."'>";
-                        echo "<textarea name='comment_content' id='comment_content' rows='1' cols='50' style='text-align:left;width:300px;resize:none;' placeholder='Write A Comment........'>" . "</textarea>";
-                        echo "<button type='submit' style='border:0;background:transparent;' id='commment_status' name='comment_status'>";
-                          echo "<img src='/images/comment.png' width='30px' height='30px' alt='submit'>";
-                        echo "</button>";
-                      echo "</fieldset>";
-                    echo "</form>";
-                  echo "</center>";
-                  //code to display comments
-                  $result_comment_test = mysqli_query($connecttest,"SELECT comment_content, comment_date, username FROM post_comment WHERE testimony_id=". $rowtestimony['testimony_id']."");
-                  while($rowtest = mysqli_fetch_assoc($result_comment_test))
-                  {
-                          echo $rowtest['username'] . "&nbsp;&nbsp;";
-                          echo "(" . $rowtest['comment_date'] .  ")";
-                          echo "</br>";
-                          echo $rowtest['comment_content'];
-                          echo "</br>";
-                          echo "</br>";
-                  }
-              echo "</div>";
             echo "</td>";
           echo "</tr>";
         echo "</form>";
@@ -112,28 +85,4 @@ if (isset($_POST['like'])) {
   }
     echo "<meta http-equiv='refresh' content='0'>";
 }
-?>
-
-<?php include 'databaseconn.php' ?>
-<?php
-//code to insert records in comment table
-if(isset($_POST['comment_status']))
-{
-  $username = $_POST['username'];
-  $testimony_id = $_POST['testimony_id'];
-  $comment_content = $_POST['comment_content'];
-
-  mysqli_query($connect, "INSERT INTO post_comment (username,testimony_id,comment_content,comment_date)
-              VALUES('$username','$testimony_id','$comment_content', NOW())");
-              if(mysqli_affected_rows($connect) > 0){
-            }else {
-              echo mysqli_error($connect);
-              echo "Not Added!";
-            }
-  echo "<meta http-equiv='refresh' content='0'>";
-}
-?>
-
-<?php
-
 ?>

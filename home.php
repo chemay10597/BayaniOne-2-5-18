@@ -74,10 +74,10 @@
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
 
-                          $result = mysqli_query($connect,"SELECT group_name FROM groups INNER JOIN users ON groups.user_id=users.user_id WHERE username='". $_SESSION["username"] ."'");
-                            while($row = mysqli_fetch_array($result))
+                          $resultgroup = mysqli_query($connect,"SELECT group_name FROM groups INNER JOIN users ON groups.user_id=users.user_id WHERE username='". $_SESSION["username"] ."'");
+                            while($rowgroup = mysqli_fetch_array($resultgroup))
                             {
-                              echo "<a href='groupprofile.php'>". $row['group_name'] ."</a>";
+                              echo "<a href='groupprofile.php'>". $rowgroup['group_name'] ."</a>";
                             }
                           mysqli_close($connect);
                         ?>

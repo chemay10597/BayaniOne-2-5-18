@@ -8,7 +8,20 @@
     } else {
 ?>
 <?php include 'databaseconn.php' ?>
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
 
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:hover {background-color:#f5f5f5;}
+</style>
   <body style="background-color:#b3b3b3;">
       <div>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -141,8 +154,10 @@
           $result = mysqli_query($connect,"SELECT * FROM users WHERE username LIKE '%".$datainput."%'");
             echo "<table>";
             while($row = mysqli_fetch_array($result)){
-                echo $row['username'];
-                echo "</br>";
+                echo "<tr>";
+                  echo "<td>".$row['username']."</td>";
+                  echo "<td>"."</td>";
+                echo "</tr>";
             }
             echo "</table>";
           }
