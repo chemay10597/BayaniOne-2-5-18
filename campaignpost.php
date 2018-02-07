@@ -5,9 +5,9 @@ include_once("header.php");
 if(!isset($_SESSION["username"])){
     header("location:index.php");
 } else {
+  $var_valuecampaign = $_REQUEST['campaign_id'];
 ?>
 <?php include 'databaseconn.php' ?>
-
   <body style="background-color: #ffffff;">
       <div>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -19,13 +19,38 @@ if(!isset($_SESSION["username"])){
                   <span class="icon-bar"></span>
                 </button>
                 <a class = "navbar-brand" href="home.php"><span><image src = "../images/logo.png" height= "50px" width="50px"></span><span><image src = "../images/logotext.png" id="logotext" height= "50px" width="200px"></span></a>
-              <!-- <a class="navbar-brand" href="index.html">BayaniOne<span>.</span></a> -->
               </div>
 
               <div class="collapse navbar-collapse" id="myNavbar">
 
                 <ul class="nav navbar-nav navbar-right">
-                  <input class="form-control" type="text" style="width:100%; position:bottom;" placeholder="Search for...">
+                  <form action="search.php" method="GET" style="height:40px;">
+                    <input class="form-control" name="datainput" type="text" style="width:100%; position:bottom;" placeholder="Search for...">
+                    <input style="width:0;height:0;display: none;" class="btnlogin" type="submit" value="Search" name="search" />
+                  </form>
+                  <li>
+                  <div class="dropdown">
+                			   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                    <div class="dropdown-content" style="height:500px; overflow:auto;" id="nav">
+                    <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
+                  	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
+                    </div>
+                  </div>
+                  </li>
+                  <li>
+                    <div class="dropdown">
+                      <button class="dropbtn">Delivery Courier</button>
+                      <div class="dropdown-content" id="nav">
+                        <a href="http://www.air21.com.ph/main/">AIR21</a>
+                        <a href="https://express.2go.com.ph/">2GO Express</a>
+                        <a href="http://www.lbcexpress.com/">LBC Express</a>
+                        <a href="http://new.xend.com.ph/">Xend Business Solutions</a>
+                        <a href="http://www.jrs-express.com/">JRS Express</a>
+                        <a href="http://abestexpress.com/">ABest Express</a>
+                        <a href="http://www.dhl.com.ph/en.html">DHL Express</a>
+                      </div>
+                    </div>
+                  </li>
                   <li>
                     <a href= "viewmap.php">View Map</a>
                   </li>
@@ -39,7 +64,6 @@ if(!isset($_SESSION["username"])){
                     </div>
                   </li>
                   <li>
-                    <!--<a href="#mygroup">My Group</a>-->
                     <div class="dropdown">
                       <button class="dropbtn">My Group</button>
                       <div class="dropdown-content" id="nav">
@@ -53,10 +77,10 @@ if(!isset($_SESSION["username"])){
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
 
-                          $result = mysqli_query($connect,"SELECT group_name FROM groups INNER JOIN users ON groups.user_id=users.user_id WHERE username='". $_SESSION["username"] ."'");
-                            while($row = mysqli_fetch_array($result))
+                          $resultgroup = mysqli_query($connect,"SELECT group_name FROM groups INNER JOIN users ON groups.user_id=users.user_id WHERE username='". $_SESSION["username"] ."'");
+                            while($rowgroup = mysqli_fetch_array($resultgroup))
                             {
-                              echo "<a href='groupprofile.php'>". $row['group_name'] ."</a>";
+                              echo "<a href='groupprofile.php'>". $rowgroup['group_name'] ."</a>";
                             }
                           mysqli_close($connect);
                         ?>
@@ -107,6 +131,7 @@ if(!isset($_SESSION["username"])){
         </nav>
 
         <center><div class="scroll">
+
           <?php
             //code to diplays post, comment, and insert comment for all that login user can see (donation_campaign)
             $connect_campaign=mysqli_connect("localhost","root","","bayanion_db");
@@ -161,12 +186,6 @@ if(!isset($_SESSION["username"])){
                             echo "<button type='submit' style='border:0;background:transparent' id='like' name='like'>";
                               echo "<img src='/images/star.png' width='30px' height='30px' alt='submit'>";
                             echo "</button>";
-                          echo "</form>";
-                          echo "<form action='posts.php' method='get' style='float:right;padding-right:25em';>";
-                          echo "<input type=hidden name='campaign_id' id='campaign_id' value =" . $rowcampaign['campaign_id'] . ">";
-                          echo "<button name='commentbtn' id='commentbtn' style='border:0;background:transparent'>";
-                            echo "<img src='/images/comment.png' width='30px' height='30px' alt='submit'>";
-                          echo "</button>";
                           echo "</form>";
                         echo "<div>";
                         //code to create comment
@@ -223,26 +242,6 @@ if(!isset($_SESSION["username"])){
               echo mysqli_error($connect);
             }
               echo "<meta http-equiv='refresh' content='0'>";
-          }
-        ?>
-
-        <?php include 'databaseconn.php' ?>
-        <?php
-          //code to insert records in comment table
-          if(isset($_POST['comment_status']))
-          {
-            $user_id = $_POST['user_id'];
-            $campaign_id = $_POST['campaign_id'];
-            $comment_content = $_POST['comment_content'];
-
-            mysqli_query($connect, "INSERT INTO post_comment (user_id,campaign_id,comment_content,comment_date)
-                        VALUES('$user_id','$campaign_id','$comment_content', NOW())");
-                        if(mysqli_affected_rows($connect) > 0){
-                      }else {
-                        echo mysqli_error($connect);
-                        echo "Not Added!";
-                      }
-            echo "<meta http-equiv='refresh' content='0'>";
           }
         ?>
         </div></center>

@@ -20,4 +20,52 @@
     <link rel="stylesheet" type="text/css" href="../css/createpost.css">
     <script src="../jquery/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width">
+    <?php include 'databaseconn.php' ?>
+    <?php
+    $count=0;
+      //code to insert records in comment table
+      if(isset($_POST['comment_status']))
+      {
+        $user_id = mysqli_real_escape_string($connect, $_POST["user_id"]);
+        $campaign_id = mysqli_real_escape_string($connect, $_POST["campaign_id"]);
+        $comment_content = mysqli_real_escape_string($connect, $_POST["comment_content"]);
+
+
+        //$user_id = $_POST['user_id'];
+        //$campaign_id = $_POST['campaign_id'];
+        //$comment_content = $_POST['comment_content'];
+
+        mysqli_query($connect, "INSERT INTO post_comment (user_id,campaign_id,comment_content,comment_date)
+                    VALUES('$user_id','$campaign_id','$comment_content', NOW())");
+                    if(mysqli_affected_rows($connect) > 0){
+                  }else {
+                    echo mysqli_error($connect);
+                    echo "Not Added!";
+                  }
+        echo "<meta http-equiv='refresh' content='0'>";
+      }
+      $resultcomment = mysqli_query($connect,"SELECT * FROM post_comment INNER JOIN users ON post_comment.user_id=users.user_id WHERE post_comment.status=0");
+      $count=mysqli_num_rows($resultcomment);
+    ?>
+    <script type="text/javascript">
+      function myFunction() {
+        $.ajax({
+          url: "view_notification.php",
+          type: "POST",
+          processData:false,
+          success: function(data){
+            $("#notification-count").remove();
+            $("#nav").show();$("#nav").html(data);
+          },
+          error: function(){}
+        });
+       }
+       $(document).ready(function() {
+        $('body').click(function(e){
+          if ( e.target.id != 'notification-icon'){
+            $("#notification-latest").hide();
+          }
+        });
+      });
+    </script>
 </head>

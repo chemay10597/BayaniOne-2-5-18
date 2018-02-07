@@ -5,6 +5,7 @@ include_once("header.php");
 if(!isset($_SESSION["username"])){
     header("location:index.php");
 } else {
+  $var_valuetest = $_REQUEST['testimony_id'];
 ?>
 <?php include 'databaseconn.php' ?>
 
@@ -162,12 +163,6 @@ if(!isset($_SESSION["username"])){
                           echo "<button type='submit' style='border:0;background:transparent' id='like' name='like'>";
                             echo "<img src='/images/star.png' width='30px' height='30px' alt='submit'>";
                           echo "</button>";
-                        echo "</form>";
-                        echo "<form action='posts.php' method='get' style='float:right;padding-right:25em';>";
-                        echo "<input type=hidden name='testimony_id' id='testimony_id' value =" . $rowtestimony['testimony_id'] . ">";
-                        echo "<button name='commentbtn' id='commentbtn' style='border:0;background:transparent'>";
-                          echo "<img src='/images/comment.png' width='30px' height='30px' alt='submit'>";
-                        echo "</button>";
                         echo "</form>";
                       echo "<div>";
                       //code to create comment

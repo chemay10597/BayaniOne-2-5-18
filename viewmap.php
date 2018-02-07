@@ -30,9 +30,13 @@
                     <input style="width:0;height:0;display: none;" class="btnlogin" type="submit" value="Search" name="search" />
                   </form>
                   <li>
-                    <a href= "notification.php">
-                        <img src="images/notif.png" width="30px" height="30px" />
-                    </a>
+                    <div class="dropdown">
+                  			   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                      <div class="dropdown-content" style="height:500px; overflow:auto;" id="nav">
+                      <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
+                    	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
+                      </div>
+                    </div>
                   </li>
                   <li>
                     <div class="dropdown">
@@ -126,26 +130,91 @@
               </div>
             </div>
         </nav>
-
-        <center><div class="scroll" style="height:500px;">
+        <style>
+          #map {
+            height: 100%;
+          }
+        </style>
+        <center><div style="height:1000px;width:auto;">
         </br>
-        <h3>Google Maps</h3>
           <div id="map"></div>
+
           <script>
-                  function initMap() {
-                  var uluru = {lat: 10.3157, lng: 123.8854};
-                  var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 50,
-                    center: uluru
-                  });
-                  var marker = new google.maps.Marker({
-                    position: uluru,
-                    map: map
+            var customLabel = {
+              hall: {
+                label: 'BH'
+              },
+              organization: {
+                label: 'FC'
+              }
+            };
+
+              function initMap() {
+              var map = new google.maps.Map(document.getElementById('map'), {
+                center: new google.maps.LatLng(10.333333, 123.933334),
+                zoom: 14
               });
+              var infoWindow = new google.maps.InfoWindow;
+
+                // Change this depending on the name of your PHP or XML file
+                downloadUrl('/mapmarkers.xml', function(data) {
+                  var xml = data.responseXML;
+                  var markers = xml.documentElement.getElementsByTagName('marker');
+                  Array.prototype.forEach.call(markers, function(markerElem) {
+                    var location_id = markerElem.getAttribute('location_id');
+                    var name = markerElem.getAttribute('name');
+                    var address = markerElem.getAttribute('address');
+                    var population = markerElem.getAttribute('population');
+                    var type = markerElem.getAttribute('type');
+                    var point = new google.maps.LatLng(
+                        parseFloat(markerElem.getAttribute('lat')),
+                        parseFloat(markerElem.getAttribute('lng')));
+
+                    var infowincontent = document.createElement('div');
+                    var strong = document.createElement('strong');
+                    strong.textContent = name
+                    infowincontent.appendChild(strong);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var text = document.createElement('text');
+                    text.textContent = address
+                    infowincontent.appendChild(text);
+                    var icon = customLabel[type] || {};
+                    var marker = new google.maps.Marker({
+                      map: map,
+                      position: point,
+                      label: icon.label
+                    });
+                    marker.addListener('click', function() {
+                      infoWindow.setContent(infowincontent);
+                      infoWindow.open(map, marker);
+                    });
+                  });
+                });
+              }
+
+
+
+            function downloadUrl(url, callback) {
+              var request = window.ActiveXObject ?
+                  new ActiveXObject('Microsoft.XMLHTTP') :
+                  new XMLHttpRequest;
+
+              request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                  request.onreadystatechange = doNothing;
+                  callback(request, request.status);
+                }
+              };
+
+              request.open('GET', url, true);
+              request.send(null);
             }
+
+            function doNothing() {}
           </script>
           <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNHLvLYTxKYc0_20JIE_a2pplQrD_MtF4&callback=initMap">
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo3z3FCrS5z1wk8Cd2RFfcTqkf4l6Ymjc&callback=initMap">
           </script>
         </div></center>
       </div>

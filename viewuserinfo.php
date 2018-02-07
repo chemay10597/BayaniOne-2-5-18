@@ -6,6 +6,8 @@
     if(!isset($_SESSION["username"])){
         header("location:index.php");
     } else {
+      $var_valueuser = $_REQUEST['user_id'];
+      $var_valueaccount_type = $_REQUEST['account_type'];
 ?>
 <?php include 'databaseconn.php' ?>
 
@@ -157,10 +159,11 @@
           {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
           }
+          $var_valueuser = $_REQUEST['user_id'];
           //code to get the login user info based on account_type (individual user)
           if($account_type='individual')
           {
-            $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN individual_user ON users.user_id=individual_user.user_id INNER JOIN address ON users.address_id=address.address_id WHERE users.username = '".$_SESSION['username']."'");
+            $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN individual_user ON users.user_id=individual_user.user_id INNER JOIN address ON users.address_id=address.address_id WHERE user_id=$var_valueuser");
             while($row = mysqli_fetch_assoc($result))
               {
                 echo "<div>";
@@ -276,10 +279,11 @@
             {
               echo "Failed to connect to MySQL: " . mysqli_connect_error();
             }
+            $var_valueuser = $_REQUEST['user_id'];
             //code to get the login user info based on account_type (organization user)
             if($account_type='organization')
             {
-              $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN organization_user ON users.user_id=organization_user.user_id INNER JOIN address ON users.address_id=address.address_id WHERE users.username = '".$_SESSION['username']."'");
+              $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN organization_user ON users.user_id=organization_user.user_id INNER JOIN address ON users.address_id=address.address_id");
               while($row = mysqli_fetch_assoc($result))
               {
                 echo "<div>";

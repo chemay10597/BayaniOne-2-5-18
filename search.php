@@ -43,9 +43,13 @@
                     <input style="width:0;height:0;display: none;" class="btnlogin" type="submit" value="Search" name="search" />
                   </form>
                   <li>
-                    <a href= "notification.php">
-                        <img src="images/notif.png" width="30px" height="30px" />
-                    </a>
+                    <div class="dropdown">
+                  			   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                      <div class="dropdown-content" style="height:500px; overflow:auto;" id="nav">
+                      <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
+                    	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
+                      </div>
+                    </div>
                   </li>
                   <li>
                     <div class="dropdown">
@@ -154,10 +158,19 @@
           $result = mysqli_query($connect,"SELECT * FROM users WHERE username LIKE '%".$datainput."%'");
             echo "<table>";
             while($row = mysqli_fetch_array($result)){
+
                 echo "<tr>";
-                  echo "<td>".$row['username']."</td>";
-                  echo "<td>"."</td>";
+                echo "<td>";
+                  echo "<form action='viewuserinfo.php' method='get'>";
+                    echo "<input type=hidden name='user_id' id='user_id' value =" . $row['user_id'] . ">";
+                    echo "<button name='viewuserinfo' id='viewuserinfo' style='border:0;background:transparent;color:#000000;'>";
+                      echo "<img src='Uploads/",$row['user_photo'],"' width='30' height='30' />";
+                      echo "&nbsp;&nbsp;" . $row['username'];
+                    echo "</button>";
+                  echo "</form>";
+                echo "</td>";
                 echo "</tr>";
+
             }
             echo "</table>";
           }
