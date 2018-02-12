@@ -30,8 +30,8 @@ if(!isset($_SESSION["username"])){
                   </form>
                   <li>
                   <div class="dropdown">
-                			   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
-                    <div class="dropdown-content" style="height:500px; overflow:auto;" id="nav">
+                		<button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                    <div class="dropdown-content" style="height-max:500px;overflow:auto;" id="nav">
                     <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
                   	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
                     </div>
@@ -107,7 +107,6 @@ if(!isset($_SESSION["username"])){
                           {
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
-
                           $result = mysqli_query($connect,"SELECT username FROM users WHERE username='". $_SESSION["username"] ."'");
                             while($row = mysqli_fetch_array($result))
                             {
@@ -115,10 +114,28 @@ if(!isset($_SESSION["username"])){
                             }
                           mysqli_close($connect);
                         ?>
-
                       </button>
                         <div class="dropdown-content" id="nav">
                           <a href="userinfo.php">AccountSetting</a>
+                          <?php
+                          //code to get login user info for individual_user
+                          $connect=mysqli_connect("localhost","root","","bayanion_db");
+                          // Check connection
+                          if (mysqli_connect_errno())
+                          {
+                            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                          }
+                          //code to get the login user info based on account_type (individual user)
+                            $result = mysqli_query($connect,"SELECT * FROM users WHERE username = '".$_SESSION['username']."'");
+                            while($row = mysqli_fetch_assoc($result))
+                              {
+                                if($row['account_type'] == "admin") {
+                                echo "<a href='adminsignup.php'>".'Add admin'."</a>";
+                                echo "<a href='reports.php'>".'View Reports'."</a>";
+                                }
+                              }
+                            mysqli_close($connect);
+                          ?>
                         </div>
                     </div>
                   </li>

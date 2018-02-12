@@ -31,8 +31,8 @@
                   </form>
                   <li>
                     <div class="dropdown">
-                  			   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
-                      <div class="dropdown-content" style="height:500px; overflow:auto;" id="nav">
+                  		<button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                      <div class="dropdown-content" style="height-max:500px;overflow:auto;" id="nav">
                       <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
                     	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
                       </div>
@@ -109,7 +109,6 @@
                           {
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
-
                           $result = mysqli_query($connect,"SELECT username FROM users WHERE username='". $_SESSION["username"] ."'");
                             while($row = mysqli_fetch_array($result))
                             {
@@ -117,10 +116,28 @@
                             }
                           mysqli_close($connect);
                         ?>
-
                       </button>
                         <div class="dropdown-content" id="nav">
                           <a href="userinfo.php">AccountSetting</a>
+                          <?php
+                          //code to get login user info for individual_user
+                          $connect=mysqli_connect("localhost","root","","bayanion_db");
+                          // Check connection
+                          if (mysqli_connect_errno())
+                          {
+                            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                          }
+                          //code to get the login user info based on account_type (individual user)
+                            $result = mysqli_query($connect,"SELECT * FROM users WHERE username = '".$_SESSION['username']."'");
+                            while($row = mysqli_fetch_assoc($result))
+                              {
+                                if($row['account_type'] == "admin") {
+                                echo "<a href='adminsignup.php'>".'Add admin'."</a>";
+                                echo "<a href='reports.php'>".'View Reports'."</a>";
+                                }
+                              }
+                            mysqli_close($connect);
+                          ?>
                         </div>
                     </div>
                   </li>
@@ -178,52 +195,50 @@
                         echo "<tr>";
                           echo "<td>" . 'User Full Name:' . "</td>";
                           echo "<td>";
-                            echo "<input type='text' id='first_name' name='first_name' value=". $row['first_name'] .">";
-                            echo "</br>";
-                            echo "<input type='text' id='middle_name' name='middle_name' value=". $row['middle_name'] .">";
-                            echo "</br>";
-                            echo "<input type='text' id='last_name' name='last_name' value=". $row['last_name'] .">";
+                            echo "<input type='text' style='border:0;' id='first_name' name='first_name' value=". $row['first_name'] .">";
+                            echo "<input type='text' style='border:0;' id='middle_name' name='middle_name' value=". $row['middle_name'] .">";
+                            echo "<input type='text' style='border:0;' id='last_name' name='last_name' value=". $row['last_name'] .">";
                           echo "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Birthday:' . "</td>";
-                          echo "<td>" . "<input type='text' id='birthdate' name='birthdate' value=". $row['birthdate'] .">" . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='birthdate' name='birthdate' value=". $row['birthdate'] .">" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Residential Address:' . "</td>";
-                          echo "<td>" . "<input type='text' id='street' name='street' value=". $row['street'] ." >";
-                          echo "<input type='text' id='barangay' name='barangay' value=". $row['barangay'] ." >";
-                          echo "<input type='text' id='city' name='city' value=". $row['city'] ." >";
-                          echo "<input type='text' id='zip_code' name='zip_code' value=". $row['zip_code'] ." >";
-                          echo "<input type='text' id='province' name='province' value=". $row['province'] ." >";
+                          echo "<td>" . "<input type='text' style='border:0;' id='street' name='street' value=". $row['street'] ." >";
+                          echo "<input type='text' style='border:0;' id='barangay' name='barangay' value=". $row['barangay'] ." >";
+                          echo "<input type='text' style='border:0;' id='city' name='city' value=". $row['city'] ." >";
+                          echo "<input type='text' style='border:0;' id='zip_code' name='zip_code' value=". $row['zip_code'] ." >";
+                          echo "<input type='text' style='border:0;' id='province' name='province' value=". $row['province'] ." >";
                           echo "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Gender:' . "</td>";
-                          echo "<td>" . "<input type='text' id='gender' name='gender' value=". $row['gender'] ." >" . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='gender' name='gender' value=". $row['gender'] ." >" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Email:' . "</td>";
-                          echo "<td>" . "<input type='text' id='email_address' name='email_address' placeholder='user@domain.com' value=". $row['email_address'] ." >" . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='email_address' name='email_address' placeholder='user@domain.com' value=". $row['email_address'] ." >" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Mobile No:' . "</td>";
-                          echo "<td>" . "<input type='text' id='mobile_no' name='mobile_no' value=". $row['mobile_no'] ." >" . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='mobile_no' name='mobile_no' value=". $row['mobile_no'] ." >" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Telephone:' . "</td>";
-                          echo "<td>" . "<input type='text' id='telephone_no' name='telephone_no' value=". $row['telephone_no'] ." >" . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='telephone_no' name='telephone_no' value=". $row['telephone_no'] ." >" . "</td>";
                         echo "</tr>";
-                        echo "<tr>";
+                        /*echo "<tr>";
                           echo "<td>" . 'Username:' . "</td>";
-                          echo "<td>" . "<input type='text' name='username' id='username' value =" . $row['username']. ">" . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' name='username' id='username' value =" . $row['username']. ">" . "</td>";
                         echo "</tr>";
                         echo "<tr>";
                           echo "<td>" . 'Password:' . "</td>";
-                          echo "<td>" . "<input type='text' name='password' id='password' value =" . $row['password']. ">" . "</td>";
-                        echo "</tr>";
+                          echo "<td>" . "<input type='text' style='border:0;' name='password' id='password' value =" . $row['password']. ">" . "</td>";
+                        echo "</tr>";*/
                         echo "<tr>";
-                          //echo "<td>" . "<input type='submit' id='editind' name='editind' value='Edit'>" . "</td>";
+                          echo "<td>" . "</td>";
                           echo "<td>" . "<input type='submit' id='updateind' name='updateind' value='Update'>" . "</td>";
                         echo "</tr>";
                       echo "</form>";
@@ -369,6 +384,138 @@
               }else {
                 echo mysqli_error($connect);
               }
+            echo "<meta http-equiv='refresh' content='0'>";
+            }
+          ?>
+
+          <?php
+            //code to get the account_type of the login user
+            $connect=mysqli_connect("localhost","root","","bayanion_db");
+            // Check connection
+            if (mysqli_connect_errno())
+            {
+              echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            }
+            $result = mysqli_query($connect,"SELECT account_type FROM users WHERE username = '".$_SESSION['username']."'");
+            while($row = mysqli_fetch_assoc($result))
+            {
+              echo "<input type=hidden name='account_type' id='account_type' value =" . $row['account_type']. ">";
+            }
+            mysqli_close($connect);
+          ?>
+          <?php
+          //code to get login user info for individual_user
+          $connect=mysqli_connect("localhost","root","","bayanion_db");
+          // Check connection
+          if (mysqli_connect_errno())
+          {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+          }
+          //code to get the login user info based on account_type (individual user)
+          if($account_type='admin')
+          {
+            $result = mysqli_query($connect,"SELECT * FROM users INNER JOIN admin ON users.user_id=admin.user_id INNER JOIN address ON users.address_id=address.address_id WHERE users.username = '".$_SESSION['username']."'");
+            while($row = mysqli_fetch_assoc($result))
+              {
+                echo "<div>";
+                  echo "<table>";
+                    echo "<tbody>";
+                      echo "<form action='' method='post'>";
+                        echo "<tr>";
+                          echo "<td>";
+                            echo "<input type='hidden' name='user_id' id='user_id' value =" . $row['user_id']. ">";
+                            echo "<input type='hidden' name='admin_id' id='admin_id' value =" . $row['admin_id']. ">";
+                            echo "<input type='hidden' name='address_id' id='address_id' value =" . $row['address_id']. ">";
+                            echo "<img src='Uploads/",$row['user_photo'],"' width='175' height='200' />";
+                          echo "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'User Full Name:' . "</td>";
+                          echo "<td>";
+                            echo "<input type='text' style='border:0;' id='admin_firstname' name='admin_firstname' value=". $row['admin_firstname'] .">";
+                            echo "<input type='text' style='border:0;' id='admin_middlename' name='admin_middlename' value=". $row['admin_middlename'] .">";
+                            echo "<input type='text' style='border:0;' id='admin_lastname' name='admin_lastname' value=". $row['admin_lastname'] .">";
+                          echo "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Birthday:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='admin_birthdate' name='admin_birthdate' value=". $row['admin_birthdate'] .">" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Residential Address:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='street' name='street' value=". $row['street'] ." >";
+                          echo "<input type='text' style='border:0;' id='barangay' name='barangay' value=". $row['barangay'] ." >";
+                          echo "<input type='text' style='border:0;' id='city' name='city' value=". $row['city'] ." >";
+                          echo "<input type='text' style='border:0;' id='zip_code' name='zip_code' value=". $row['zip_code'] ." >";
+                          echo "<input type='text' style='border:0;' id='province' name='province' value=". $row['province'] ." >";
+                          echo "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Gender:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='admin_gender' name='admin_gender' value=". $row['admin_gender'] ." >" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Email:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='email_address' name='email_address' placeholder='user@domain.com' value=". $row['email_address'] ." >" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Mobile No:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='mobile_no' name='mobile_no' value=". $row['mobile_no'] ." >" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Telephone:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' id='telephone_no' name='telephone_no' value=". $row['telephone_no'] ." >" . "</td>";
+                        echo "</tr>";
+                        /*echo "<tr>";
+                          echo "<td>" . 'Username:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' name='username' id='username' value =" . $row['username']. ">" . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                          echo "<td>" . 'Password:' . "</td>";
+                          echo "<td>" . "<input type='text' style='border:0;' name='password' id='password' value =" . $row['password']. ">" . "</td>";
+                        echo "</tr>";*/
+                        echo "<tr>";
+                          echo "<td>" . "</td>";
+                          echo "<td>" . "<input type='submit' id='updateind' name='updateind' value='Update'>" . "</td>";
+                        echo "</tr>";
+                      echo "</form>";
+                    echo "</tbody>";
+                  echo "</table>";
+                echo "</div>";
+              }
+            }
+            mysqli_close($connect);
+          ?>
+
+          <?php include 'databaseconn.php' ?>
+          <?php
+            if (isset($_POST['updateind'])) {
+            $user_id = $_POST['user_id'];
+            $org_id = $_POST['org_id'];
+            $address_id = $_POST['address_id'];
+            $first_name = $_POST['first_name'];
+            $middle_name = $_POST['middle_name'];
+            $last_name = $_POST['last_name'];
+            $birthdate = $_POST['birthdate'];
+            $gender = $_POST['gender'];
+            $street = $_POST['street'];
+            $barangay = $_POST['barangay'];
+            $city = $_POST['city'];
+            $zip_code = $_POST['zip_code'];
+            $province = $_POST['province'];
+            $email_address = $_POST['email_address'];
+            $mobile_no = $_POST['mobile_no'];
+            $telephone_no = $_POST['telephone_no'];
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            mysqli_query($connect, "UPDATE users SET email_address='$email_address', mobile_no='$mobile_no', telephone_no='$telephone_no', username='$username', password='$password' WHERE user_id=$user_id");
+            mysqli_query($connect, "UPDATE individual_user SET first_name='$first_name', middle_name='$middle_name', last_name='$last_name', birthdate='$birthdate', gender='$gender' WHERE iu_id=$iu_id");
+            mysqli_query($connect, "UPDATE address SET street='$street', barangay='$barangay', city='$city', zip_code='$zip_code', province='$province' WHERE address_id=$address_id");
+            if(mysqli_affected_rows($connect) > 0){
+              echo "Successfully Update!";
+            }else {
+              echo mysqli_error($connect);
+             }
             echo "<meta http-equiv='refresh' content='0'>";
             }
           ?>

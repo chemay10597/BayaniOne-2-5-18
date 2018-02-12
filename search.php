@@ -121,7 +121,6 @@
                           {
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
-
                           $result = mysqli_query($connect,"SELECT username FROM users WHERE username='". $_SESSION["username"] ."'");
                             while($row = mysqli_fetch_array($result))
                             {
@@ -129,10 +128,28 @@
                             }
                           mysqli_close($connect);
                         ?>
-
                       </button>
                         <div class="dropdown-content" id="nav">
                           <a href="userinfo.php">AccountSetting</a>
+                          <?php
+                          //code to get login user info for individual_user
+                          $connect=mysqli_connect("localhost","root","","bayanion_db");
+                          // Check connection
+                          if (mysqli_connect_errno())
+                          {
+                            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                          }
+                          //code to get the login user info based on account_type (individual user)
+                            $result = mysqli_query($connect,"SELECT * FROM users WHERE username = '".$_SESSION['username']."'");
+                            while($row = mysqli_fetch_assoc($result))
+                              {
+                                if($row['account_type'] == "admin") {
+                                echo "<a href='adminsignup.php'>".'Add admin'."</a>";
+                                echo "<a href='reports.php'>".'View Reports'."</a>";
+                                }
+                              }
+                            mysqli_close($connect);
+                          ?>
                         </div>
                     </div>
                   </li>

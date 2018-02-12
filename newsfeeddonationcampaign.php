@@ -1,23 +1,21 @@
   <?php
-    //code to diplays post, comment, and insert comment for all that login user can see (donation_campaign)
     $connect_campaign=mysqli_connect("localhost","root","","bayanion_db");
     // Check connection
     if (mysqli_connect_errno())
     {
       echo "Failed to connect to MySQL: " . mysqli_connect_error();
     }
-
     //code to display donation posts
     $result_campaign = mysqli_query($connect_campaign,"SELECT * FROM donation_campaign INNER JOIN users ON donation_campaign.user_id=users.user_id ORDER BY donation_campaign.campaign_id DESC");
-
     while($rowcampaign = mysqli_fetch_assoc($result_campaign))
     {
-      echo "<table style='width: 600px; height: auto; background-color: #ffffff;'>";
       echo "<center>";
+      echo "<div style='width:600px;height:auto;background-color:#ffffff;'>";
+      echo "<table style='width 500px;height:auto;>";
         echo "<tbody>";
           echo "<form action='home.php' method='post'>";
             echo "<tr>";
-              echo "<td style='text-align: left; padding: 10px;'>";
+              echo "<td style='text-align:left;padding:10px;'>";
                   echo "<img class='img-circle' src='Uploads/",$rowcampaign['user_photo'],"' width='50px' height='50px' />";
                   echo "</br>";
                   echo "<center>";
@@ -25,7 +23,7 @@
                   echo "</center>";
                   echo "</br>";
               echo "</td>";
-              echo "<td style='text-align: left; padding: 10px;'>";
+              echo "<td style='text-align:left;padding:10px;'>";
               if($rowcampaign['post_status']==='timeline')
               {
                   echo "<img src='images/user.png' width='20px' height='20px' />";
@@ -42,29 +40,71 @@
                   echo "</br>";
                 echo "<p>".$rowcampaign['campaign_description']."</p>";
                   echo "</br>";
-                echo "<img src='Uploads/",$rowcampaign['campaign_photo'],"' width='300px' height='250px' />";
+                echo "<img src='Uploads/",$rowcampaign['campaign_photo'],"' width='400px' height='300px' />";
                   echo "</br>";
-                  echo "<label type='text' name='total_like' id='total_like' value =" . $rowcampaign['total_like'] . ">" . $rowcampaign['total_like'] ."</label>";
-                  echo "<form id='likefrm' name='likefrm' action='' method='post'>";
+                  echo "<span style='float:left;'>";
+                    echo "<label type='text' name='total_like' id='total_like' value =" . $rowcampaign['total_like'] . ">" . $rowcampaign['total_like'] ."</label>";
+                    echo "<form id='likefrm' name='likefrm' action='' method='post'>";
+                      echo "<input type=hidden name='campaign_id' id='campaign_id' value =" . $rowcampaign['campaign_id'] . ">";
+                      echo "<input type=hidden id='Text1' name='Text1'>";
+                      echo "<input type=hidden id='Text1' name='Text1'>";
+                      echo "<button type='submit' style='border:0;background:transparent' id='like' name='like'>";
+                        echo "<img src='/images/star.png' width='30px' height='30px' alt='submit'>";
+                      echo "</button>";
+                    echo "</form>";
+                  echo "</span>";
+                  echo "<span style='float:left;'>";
+                    echo "<form action='campaignpost.php' method='get'>";
+                    echo "</br>";
                     echo "<input type=hidden name='campaign_id' id='campaign_id' value =" . $rowcampaign['campaign_id'] . ">";
-                    echo "<input type=hidden id='Text1' name='Text1'>";
-                    echo "<input type=hidden id='Text1' name='Text1'>";
-                    echo "<button type='submit' style='border:0;background:transparent' id='like' name='like'>";
-                      echo "<img src='/images/star.png' width='30px' height='30px' alt='submit'>";
+                    echo "<button name='commentbtncampaign' id='commentbtncampaign' style='border:0;background:transparent'>";
+                      echo "<img src='/images/comment.png' width='30px' height='30px' alt='submit'>";
                     echo "</button>";
-                  echo "</form>";
-                  echo "<form action='campaignpost.php' method='get' style='float:right;padding-right:25em';>";
-                  echo "<input type=hidden name='campaign_id' id='campaign_id' value =" . $rowcampaign['campaign_id'] . ">";
-                  echo "<button name='commentbtncampaign' id='commentbtncampaign' style='border:0;background:transparent'>";
-                    echo "<img src='/images/comment.png' width='30px' height='30px' alt='submit'>";
-                  echo "</button>";
-                  echo "</form>";
+                    echo "</form>";
+                  echo "</span>";
               echo "</td>";
+              echo "<td style='text-align:left;padding:10px; width:20px;'>";
+                echo "<div style=''>";
+                  echo "<button onclick='myFunction()' class='dropbtn' style='width:50px;height:70px;border:0;background:transparent;'>";
+                    echo "<img src='/images/menu.png' width='30px' height='30px' alt='submit'>";
+                  echo "</button>";
+                    echo "<div id='myDropdown' class='dropdown-content' style='background:#ffffff;border:1px;'>";
+                      echo "<form action='editcampaignpost.php' method='get'>";
+                      echo "</br>";
+                      echo "<input type=hidden name='campaign_id' id='campaign_id' value =" . $rowcampaign['campaign_id'] . ">";
+                      echo "<button name='commentbtncampaign' id='commentbtncampaign' style='border:0;background:transparent'>";
+                        echo "Edit";
+                      echo "</button>";
+                      echo "</form>";
+                      echo "<a href='#about'>"."</a>";
+                      echo "<a href='#contact'>"."</a>";
+                    echo "</div>";
+                echo "</div>";
+              echo "</td>";
+              echo "<script>
+              function myFunction() {
+                  document.getElementById('myDropdown').classList.toggle('show');
+              }
+              window.onclick = function(event) {
+                if (!event.target.matches('.dropbtn')) {
+
+                  var dropdowns = document.getElementsByClassName('dropdown-content');
+                  var i;
+                  for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                      openDropdown.classList.remove('show');
+                    }
+                  }
+                }
+              }
+              </script>";
             echo "</tr>";
           echo "</form>";
         echo "</tbody>";
-        echo "</center>";
       echo "</table>";
+      echo "</div>";
+      echo "</center>";
       echo "</br>";
     }
     mysqli_close($connect_campaign);

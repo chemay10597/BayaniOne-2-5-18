@@ -1,14 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php
-
     include_once("header.php");
-    //session_start();
     if(!isset($_SESSION["username"])){
         header("location:index.php");
-    } else {
+    }
+      else {
 ?>
 <?php include 'databaseconn.php' ?>
-
   <body style="background-color:#b3b3b3;">
       <div>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -21,9 +19,7 @@
                 </button>
                 <a class = "navbar-brand" href="home.php"><span><image src = "../images/logo.png" height= "50px" width="50px"></span><span><image src = "../images/logotext.png" id="logotext" height= "50px" width="200px"></span></a>
               </div>
-
               <div class="collapse navbar-collapse" id="myNavbar">
-
                 <ul class="nav navbar-nav navbar-right">
                   <form action="search.php" method="GET" style="height:40px;">
                     <input class="form-control" name="datainput" type="text" style="width:100%; position:bottom;" placeholder="Search for...">
@@ -31,8 +27,8 @@
                   </form>
                   <li>
                     <div class="dropdown">
-                  			   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
-                      <div class="dropdown-content" style="height:500px; overflow:auto;" id="nav">
+                  	   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                      <div class="dropdown-content" style="height-max:500px;overflow:auto;" id="nav">
                       <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
                     	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
                       </div>
@@ -88,7 +84,6 @@
                       </div>
                   </li>
                   <li>
-                    <!--<a href= "#posts">Post</a>-->
                     <div class="dropdown">
                       <button class="dropbtn">Post</button>
                       <div class="dropdown-content" id="nav">
@@ -108,7 +103,6 @@
                           {
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
-
                           $result = mysqli_query($connect,"SELECT username FROM users WHERE username='". $_SESSION["username"] ."'");
                             while($row = mysqli_fetch_array($result))
                             {
@@ -116,10 +110,28 @@
                             }
                           mysqli_close($connect);
                         ?>
-
                       </button>
                         <div class="dropdown-content" id="nav">
                           <a href="userinfo.php">AccountSetting</a>
+                          <?php
+                          //code to get login user info for individual_user
+                          $connect=mysqli_connect("localhost","root","","bayanion_db");
+                          // Check connection
+                          if (mysqli_connect_errno())
+                          {
+                            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                          }
+                          //code to get the login user info based on account_type (individual user)
+                            $result = mysqli_query($connect,"SELECT * FROM users WHERE username = '".$_SESSION['username']."'");
+                            while($row = mysqli_fetch_assoc($result))
+                              {
+                                if($row['account_type'] == "admin") {
+                                echo "<a href='adminsignup.php'>".'Add admin'."</a>";
+                                echo "<a href='reports.php'>".'View Reports'."</a>";
+                                }
+                              }
+                            mysqli_close($connect);
+                          ?>
                         </div>
                     </div>
                   </li>
@@ -132,12 +144,21 @@
         </nav>
         <center><div class="scroll" style="background-color:#b3b3b3;">
         </br>
-          <?php
-            include_once("newsfeeddonationcampaign.php");
-          ?>
-          <?php
-            include_once("newsfeedtestimonies.php");
-          ?>
+          <div style="width:100%;height:50px;background:#ffffff;">
+            <h2 style="float:left;padding-left:15em;padding-top:1em;">Donation Campaign</h2>
+            <h2 style="float:left;padding-left:30em;padding-top:1em;">Testimonies</h2>
+          </div>
+        </br>
+          <span style="float:left;">
+            <?php
+              include_once("newsfeeddonationcampaign.php");
+            ?>
+          </span>
+          <span style="float:right;">
+            <?php
+              include_once("newsfeedtestimonies.php");
+            ?>
+          </span>
         </div></center>
       </div>
     </div>

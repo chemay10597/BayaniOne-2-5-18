@@ -1,14 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php
-
     include_once("header.php");
-    //session_start();
     if(!isset($_SESSION["username"])){
         header("location:index.php");
-    } else {
+    }
+      else {
 ?>
 <?php include 'databaseconn.php' ?>
-
   <body style="background-color:#b3b3b3;">
       <div>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -21,17 +19,15 @@
                 </button>
                 <a class = "navbar-brand" href="home.php"><span><image src = "../images/logo.png" height= "50px" width="50px"></span><span><image src = "../images/logotext.png" id="logotext" height= "50px" width="200px"></span></a>
               </div>
-
               <div class="collapse navbar-collapse" id="myNavbar">
-
                 <ul class="nav navbar-nav navbar-right">
                   <form action="search.php" method="GET" style="height:40px;">
-                    <input class="form-control" name="datainput" type="text" style="width:100%; position:bottom;" placeholder="Search users, posts, groups...">
+                    <input class="form-control" name="datainput" type="text" style="width:100%; position:bottom;" placeholder="Search for...">
                     <input style="width:0;height:0;display: none;" class="btnlogin" type="submit" value="Search" name="search" />
                   </form>
                   <li>
                     <div class="dropdown">
-                  		<button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
+                  	   <button id="notification-icon" name="button" onclick="myFunction()" class="dropbtn"><span id="notification-count"><?php if($count>0) { echo $count; } ?></span><img height="30px" weight="30px" src="images/notif.png" /></button>
                       <div class="dropdown-content" style="height-max:500px;overflow:auto;" id="nav">
                       <?php if(isset($message)) { ?> <div class="error"><?php echo $message; ?></div> <?php } ?>
                     	<?php if(isset($success)) { ?> <div class="success"><?php echo $success;?></div> <?php } ?>
@@ -65,7 +61,6 @@
                     </div>
                   </li>
                   <li>
-                    <!--<a href="#mygroup">My Group</a>-->
                     <div class="dropdown">
                       <button class="dropbtn">My Group</button>
                       <div class="dropdown-content" id="nav">
@@ -79,17 +74,16 @@
                             echo "Failed to connect to MySQL: " . mysqli_connect_error();
                           }
 
-                          $result = mysqli_query($connect,"SELECT group_name FROM groups INNER JOIN users ON groups.user_id=users.user_id WHERE username='". $_SESSION["username"] ."'");
-                            while($row = mysqli_fetch_array($result))
+                          $resultgroup = mysqli_query($connect,"SELECT group_name FROM groups INNER JOIN users ON groups.user_id=users.user_id WHERE username='". $_SESSION["username"] ."'");
+                            while($rowgroup = mysqli_fetch_array($resultgroup))
                             {
-                              echo "<a href='groupprofile.php'>". $row['group_name'] ."</a>";
+                              echo "<a href='groupprofile.php'>". $rowgroup['group_name'] ."</a>";
                             }
                           mysqli_close($connect);
                         ?>
                       </div>
                   </li>
                   <li>
-                    <!--<a href= "#posts">Post</a>-->
                     <div class="dropdown">
                       <button class="dropbtn">Post</button>
                       <div class="dropdown-content" id="nav">
@@ -148,10 +142,9 @@
               </div>
             </div>
         </nav>
-
         <center><div class="scroll" style="background-color:#b3b3b3;">
         </br>
-          <?php include_once("privatepost.php");?>
+            
         </div></center>
       </div>
     </div>
