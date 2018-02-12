@@ -144,7 +144,9 @@
         </nav>
         <center><div class="scroll" style="background-color:#b3b3b3;">
         </br>
-            
+            <?php
+              include_once("listreports.php");
+            ?>
         </div></center>
       </div>
     </div>
